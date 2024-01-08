@@ -3,6 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Company>kitch</Company>
+    <Copyright>2024</Copyright>
+    <PackageProjectUrl>https://github.com/kitchsGithubName/kitchsWaypointLabels</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

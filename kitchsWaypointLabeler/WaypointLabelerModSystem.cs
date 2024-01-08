@@ -7,7 +7,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 using static kitchsWaypointLabeler.WaypointConfig;
 
-[assembly: ModInfo("Kitch's Waypoint Labeler", "kitch.waypointlabeler",
+[assembly: ModInfo("Kitch's Waypoint Labeler", "kitchwaypointlabeler",
                     Authors = new string[] { "kitch" },
                     Description = "A mod that remembers previously used waypoint labels.",
                     Version = "1.0.0")]
@@ -22,7 +22,6 @@ namespace kitchsWaypointLabeler
         public override void Start(ICoreAPI api)
         {
         }
-
         public override void StartServerSide(ICoreServerAPI api)
         {
         }
@@ -31,12 +30,13 @@ namespace kitchsWaypointLabeler
         {
             api.Logger.Notification(string.Concat(WaypointConfig.ModLabel, " Loading Kitch's Waypoint Labeler"));
             CoreApi = api;
-            harmony = new Harmony("kitch.waypointlabeler");
+            harmony = new Harmony("kitchwaypointlabeler");
 
             // Pulling the methods via reflection first, just to make sure they are there.
             // The idea here is to prevent this mod from crashing everything if the functions change or are removed.  I have no idea if this works.... we'll see. 
+            // These are both "private" methods, so the 'BindingFlags.Instance | BindingFlags.NonPublic' flags are needed or the method will not be found.
             var originalAutoSuggestName = typeof(Vintagestory.GameContent.GuiDialogAddWayPoint).GetMethod("autoSuggestName", BindingFlags.Instance | BindingFlags.NonPublic);
-            var originalOnSave = typeof(Vintagestory.GameContent.GuiDialogAddWayPoint).GetMethod("autoSuggestName", BindingFlags.Instance | BindingFlags.NonPublic);
+            var originalOnSave = typeof(Vintagestory.GameContent.GuiDialogAddWayPoint).GetMethod("onSave", BindingFlags.Instance | BindingFlags.NonPublic);
 
             if ((originalAutoSuggestName != null) && (originalOnSave != null))
             {
