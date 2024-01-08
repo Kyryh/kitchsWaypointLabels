@@ -1,0 +1,14 @@
+{
+	"type": "code",
+	"name": "Kitch's Waypoint Labeler",
+	"modid": "kitch.waypointlabeler",
+	"version": "1.0.0",
+
+	"description": "A mod that remembers previously used waypoint labels.",
+	"website": "https://github.com/kitchsGithubName/kitchsWaypointLabels",
+	"authors": [ "kitch" ],
+
+	"dependencies": {
+		"game": "1.18.8"
+	}
+}

@@ -5,25 +5,28 @@ using Vintagestory.API.Common;
 
 namespace kitchsWaypointLabeler
 {
-    public static class KitchsWaypointSettings
+    public static class WaypointConfig
     {
-        public const string ConfigName = "kitchs-waypoint-labels-config.json";
-        public const string ModLabel = "[kitchs-waypoint-labels]";
+        public const string ConfigName = "kitchs-waypoint-labeler.json";
+        public const string ModLabel = "[kitchs-waypoint-labeler]";
 
+        // Cached set of settings
         public static WaypointSettings cachedClientSettings = null;
 
-        [ProtoContract]
         public class WaypointSettings
         {
-            [ProtoMember(1)]
+            // User values that are saved off
             public Dictionary<string, string> NameCache { get; set; }
 
+            public bool DebugMode { get; set; }
 
             public WaypointSettings()
             {
+                DebugMode = false;
                 NameCache = new Dictionary<string, string>();
             }
 
+            // Gets the saved value
             public string Get(string icon, string color)
             {
                 string nameKey = string.Concat(icon, "-", color);
@@ -34,6 +37,8 @@ namespace kitchsWaypointLabeler
                 return "";
             }
 
+            // Sets the saved value and returns true if something is updated.
+            // To prevent the uneccesary saving if nothing changes.
             public bool Set(string icon, string color, string label)
             {
                 string nameKey = string.Concat(icon, "-", color);
@@ -57,26 +62,28 @@ namespace kitchsWaypointLabeler
 
         public static WaypointSettings GetSettings(ICoreAPI api)
         {
-            if (api.Side == EnumAppSide.Server || api.Side == EnumAppSide.Universal)
+            if (api.Side != EnumAppSide.Client)
             {
                 return null;
             }
-
+            // If we already loaded it, just return it.
             if (cachedClientSettings != null) { return cachedClientSettings; }
-            WaypointSettings settings = null;
 
+
+            WaypointSettings settings = null;
             try
             {
                 settings = api.LoadModConfig<WaypointSettings>(ConfigName);
-                if (api.Side == EnumAppSide.Client)
-                    cachedClientSettings = settings;
+                cachedClientSettings = settings;
             }
             catch
             {
+                // Theory is this throws an exception when the file isn't there, we'll see...
                 settings = null;
-                api.Logger.Log(EnumLogType.Warning, string.Concat(ModLabel, " Unable to load config file '", ConfigName, "'.  Creating you a fresh new one."));
+                api.Logger.Log(EnumLogType.Notification, string.Concat(ModLabel, " Unable to load config file '", ConfigName, "'.  Creating you a fresh new one."));
             }
 
+            // If it wasn't loaded, create a new one and save it off.
             if (settings == null)
             {
                 settings = new WaypointSettings();
@@ -87,7 +94,7 @@ namespace kitchsWaypointLabeler
 
         public static void SaveSettings(ICoreAPI api, WaypointSettings settings)
         {
-            if (api.Side == EnumAppSide.Server || api.Side == EnumAppSide.Universal)
+            if (api.Side != EnumAppSide.Client)
             {
                 return;
             }
