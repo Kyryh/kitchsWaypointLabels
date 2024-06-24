@@ -6,8 +6,11 @@ using Vintagestory.API.Server;
 
 [assembly: ModInfo("Kitch's Waypoint Labeler", "kitchwaypointlabeler",
                     Authors = new string[] { "kitch" },
+                    Contributors = new string[] { "Kyryh" },
                     Description = "A mod that remembers previously used waypoint labels.",
-                    Version = "1.1.0")]
+                    Side = "Client",
+                    Website = "https://github.com/kitchsGithubName/kitchsWaypointLabels",
+                    Version = "1.1.1")]
 
 namespace kitchsWaypointLabeler
 {
